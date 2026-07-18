@@ -6,9 +6,6 @@ from django.urls import reverse_lazy
 from . import models, forms
 from django.db.models import F
 from django.views import generic
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.views import LogoutView
-from django.views.generic import ListView
 
 
 class RegisterView(generic.CreateView):
@@ -19,7 +16,7 @@ class RegisterView(generic.CreateView):
     success_url = reverse_lazy('login')
 
 
-class AuthLoginView(LoginView):
+class AuthLoginView(generic.LoginView):
     template_name = 'users/login.html'
     redirect_authenticated_user = True
 
@@ -27,11 +24,11 @@ class AuthLoginView(LoginView):
         return '/users_list/'
 
 
-class AuthLogoutView(LogoutView):
+class AuthLogoutView(generic.LogoutView):
     next_page = reverse_lazy('login')
 
 
-class UsersListView(ListView):
+class UsersListView(generic.ListView):
     model = User
     template_name = 'users/users_list.html'
     context_object_name = 'usr_lst'
