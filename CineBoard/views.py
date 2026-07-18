@@ -17,7 +17,7 @@ class RegisterView(generic.CreateView):
     success_url = reverse_lazy('login')
 
 
-class AuthLoginView(generic.LoginView):
+class AuthLoginView(LoginView):
     template_name = 'users/login.html'
     redirect_authenticated_user = True
 
@@ -25,7 +25,7 @@ class AuthLoginView(generic.LoginView):
         return '/users_list/'
 
 
-class AuthLogoutView(generic.LogoutView):
+class AuthLogoutView(LogoutView):
     next_page = reverse_lazy('login')
 
 
