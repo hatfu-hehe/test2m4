@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from . import models, forms
 from django.db.models import F
 from django.views import generic
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 class RegisterView(generic.CreateView):
