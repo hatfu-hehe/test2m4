@@ -1,0 +1,43 @@
+<h1>Список фильмов</h1>
+
+<form action="/search/" method="GET">
+    <input type="text" name="s" placeholder="название фильма">
+    <button type="submit">Поиск</button>
+</form>
+
+<a href="/movies/add/">Добавить фильм</a>
+<ol>
+    {% for i in movies %}
+    <li>
+        <b><p>Название - {{ i.title }}</p></b>
+        <p>Описание - {{ i.description }}</p>
+        {% if i.poster %}
+        <a href="{{ i.poster.url }}" target="_blank">Постер</a>
+        {% endif %}
+        <p>Жанр - {{ i.genre }}</p>
+        <p>Год выпуска - {{ i.release_year }}</p>
+        <p>Режиссёр - {{ i.director }}</p>
+        <p>Длительность - {{ i.duration_minutes }} мин</p>
+        <p>Рейтинг - {{ i.rating }}</p>
+        <p>Страна - {{ i.country }}</p>
+        <p>Дата добавления - {{ i.created_at }}</p>
+        <a href="/movies/{{ i.id }}/edit/">Изменить</a>
+        <a href="/movies/{{ i.id }}/delete/">Удалить</a>
+    </li>
+    {% endfor %}
+</ol>
+<div class="pagination">
+    <span class="step-links">
+        {% if movies.has_previous %}
+            <a href="?page=1">&laquo; Первая</a>
+            <a href="?page={{ movies.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+        <span class="current">
+            Страница {{ movies.number }} из {{ movies.paginator.num_pages }}.
+        </span>
+        {% if movies.has_next %}
+            <a href="?page={{ movies.next_page_number }}">Следующая</a>
+            <a href="?page={{ movies.paginator.num_pages }}">Последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>

@@ -1,0 +1,20 @@
+<h1>Registrated users list</h1>
+<ul>
+    {% for i in usr_lst %}
+
+    <li>
+        <p>Login:{{ i.username }}</p>
+        <img src="{{ i.photo.url}}" alt="" width="150" height="100">
+        <p>Full name: {{ i.first_name }}</p>
+        <p>Email: {{ i.email }}</p>
+        <p>Phone number: {{ i.phone_number }}</p>
+        <p>Gender: {{ i.gender }}</p>
+    </li>
+
+    {% endfor %}
+</ul>
+
+<form action="/logout/" method="POST">
+    {% csrf_token %}
+    <button type="submit">Exit</button>
+</form>

@@ -1,0 +1,7 @@
+<h1>Authentification</h1>
+<a href="/register/">I do not have an account</a>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Authentification</button>
+</form>
