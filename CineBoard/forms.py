@@ -39,3 +39,16 @@ class MovieForm(forms.ModelForm):
         model = models.Movie
         fields = ['title', 'description', 'poster', 'genre', 'release_year',
                 'director', 'duration_minutes', 'rating', 'country']
+        
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = models.Comment
+        fields = ['author_name', 'text']
+        
+    
+class VipClientForm(forms.ModelForm):
+    class Meta:
+        model = models.VipClient
+        fields = '__all__'
+        exclude = ['select_movie']

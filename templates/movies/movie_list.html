@@ -2,27 +2,20 @@
 
 <a href="{% url 'movie_add' %}">Add new movie</a>
 
-{% for movie in movies %}
 <div>
-    <h2><a href="{% url 'movie_detail' id=movie.id %}">{{ movie.title }}</a></h2>
-    <p>Genre - {{ movie.genre }}</p>
-    <p>Year - {{ movie.release_year }}</p>
-    <p>Director - {{ movie.director }}</p>
-    <p>Country - {{ movie.country }}</p>
-    <p>Duration - {{ movie.duration_minutes }} min</p>
-    <p>Rating - {{ movie.rating }}</p>
-    <p>Views - {{ movie.views }}</p>
+{% for movie in movies %}
+    <div>
+        {% if movie.poster %}
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" width="150">
+        {% else %}
+        <p>No poster</p>
+        {% endif %}
 
-    {% if movie.poster %}
-    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" width="150">
-    {% else %}
-    <p>No poster</p>
-    {% endif %}
-
-    <a href="{% url 'movie_edit' pk=movie.id %}">Edit</a>
-    <a href="{% url 'movie_delete' pk=movie.id %}">Delete</a>
-</div>
-<hr>
+        <h2>{{ movie.title }}</h2>
+        <a href="{% url 'movie_detail' id=movie.id %}">More</a>
+    </div>
+    <hr>
 {% empty %}
-<p>No movies found</p>
+    <p>No movies found</p>
 {% endfor %}
+</div>

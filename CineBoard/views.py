@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -69,6 +69,11 @@ class MovieDetailView(generic.DetailView):
             obj.refresh_from_db()
         return obj
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = forms.CommentForm()
+        return context
+    
     
 class CreateMovieView(generic.CreateView):
     template_name = 'crud/create.html'
@@ -81,7 +86,7 @@ class CreateMovieView(generic.CreateView):
         return super(CreateMovieView, self).form_valid(form=form)
 
 
-class MovieListView(generic.ListView):
+class MovieCRUDListView(generic.ListView):
     template_name = 'crud/read.html'
     model = models.Movie
     paginate_by = 2
@@ -134,3 +139,40 @@ class SearchMovieView(generic.ListView):
         context = super().get_context_data(**kwargs)
         context['s'] = self.request.GET.get('s')
         return context
+    
+    
+class MoviesByGenreView(generic.ListView):
+    template_name = 'crud/read.html'
+    context_object_name = 'movies'
+
+    def get_queryset(self):
+        genre_id = self.kwargs.get('genre_id')
+        return models.Movie.objects.filter(genre__id=genre_id)
+    
+    
+class AddCommentView(generic.CreateView):
+    form_class = forms.CommentForm
+    template_name = 'crud/create.html'
+
+    def form_valid(self, form):
+        movie_id = self.kwargs.get('movie_id')
+        movie = get_object_or_404(models.Movie, id=movie_id)
+        comment = form.save(commit=False)
+        comment.movie = movie
+        comment.save()
+        return redirect('movie_detail', id=movie_id)
+    
+    
+class AddVipClientView(generic.CreateView):
+    form_class = forms.VipClientForm
+    template_name = 'crud/create.html'
+
+    def form_valid(self, form):
+        movie_id = self.kwargs.get('movie_id')
+        movie = get_object_or_404(models.Movie, id=movie_id)
+        vip_client = form.save(commit=False)
+        vip_client.select_movie = movie
+        vip_client.save()
+        return redirect('movie_detail', id=movie_id)
+    
+

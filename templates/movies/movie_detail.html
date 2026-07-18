@@ -7,7 +7,15 @@
 {% endif %}
 
 <p>Description - {{ movie.description }}</p>
-<p>Genre - {{ movie.genre }}</p>
+
+<p>Genre -
+    {% for g in movie.genre.all %}
+        <a href="{% url 'movies_by_genre' genre_id=g.id %}">{{ g.name_genre }}</a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        not set
+    {% endfor %}
+</p>
+
 <p>Year - {{ movie.release_year }}</p>
 <p>Director - {{ movie.director }}</p>
 <p>Country - {{ movie.country }}</p>
@@ -16,6 +24,32 @@
 <p>Views - {{ movie.views }}</p>
 <p>Added - {{ movie.created_at }}</p>
 
-<a href="{% url 'movie_edit' pk=movie.id %}">Edit</a>
-<a href="{% url 'movie_delete' pk=movie.id %}">Delete</a>
+<a href="{% url 'movie_edit' id=movie.id %}">Edit</a>
+<a href="{% url 'movie_delete' id=movie.id %}">Delete</a>
 <a href="{% url 'movie_list' %}">Back to list</a>
+
+<h3>VIP Booking</h3>
+<form action="{% url 'add_vip' movie_id=movie.id %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Book VIP</button>
+</form>
+
+<h3>Comments</h3>
+<ul>
+    {% for c in movie.comments.all %}
+    <li>
+        <b>{{ c.author_name }}</b>: {{ c.text }}
+        <p>{{ c.created_at }}</p>
+    </li>
+    {% empty %}
+    <li>No comments yet</li>
+    {% endfor %}
+</ul>
+
+<h4>Comment</h4>
+<form action="{% url 'add_comment' movie_id=movie.id %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Publish</button>
+</form>
